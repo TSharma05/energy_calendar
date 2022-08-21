@@ -1,10 +1,10 @@
 import './App.css';
-import EnergyCal from './pages/EnergyCal/EnergyCal';
+import CSVData from './components/CSVData/CSVData';
 
 function App() {
   return (
     <div className="App">
-      <EnergyCal />
+      <CSVData />
     </div>
   );
 }
