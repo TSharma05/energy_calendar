@@ -26,3 +26,15 @@ install the necessary package:
 - cleanData had to have a count added to make the highlighting of each date easier
 - Import EnergyCal to the CSVData. The data is then sent to the EnergyCal page
 - In App.js change EnergyCal to CSVData.  Be sure to import CSVData to App.js as well.
+
+## Add Shaded Regions for Each Date ##
+*Now that the data has been passed from CSVData to EnergyCal as props we can use it to create the shaded regions for each date*
+
+- This will be done in the EnergyCal.js file
+- To make the data easier to use create a new variable:
+    - let csvData = props.data
+- We want the calendar to jump to the month where the data is represented. To do this setActiveData using csvData[0].date. 
+- Need a method that generates strings that will be used to assign the correct className for each set of data. This is called getHighlight in the code.
+- The next method needed will loop through the csvData and assign the correct highlight region based on the count key from the data. This is called generateHighlight.
+- Inside the generateDatesForCurrentWeek method we will call the generateHighlight method. This will create the appropriate shaded region for each day.
+- In the EnergyCal.css file add the correct background color for each count option (1-5) so the correct colors are displayed.

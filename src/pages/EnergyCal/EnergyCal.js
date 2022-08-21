@@ -15,19 +15,22 @@ import {
 import "./EnergyCal.css"
 
 
-export default function EnergyCal() {
 
+
+export default function EnergyCal(props) {
     // keep track of the selected date
     const [selectedDate, setSelectedDate] = useState(new Date());
 
+    let csvData = props.data;
+
     // helps render dates in the currently visible month
-    const [activeDate, setActiveDate] = useState(new Date());
+    const [activeDate, setActiveDate] = useState(new Date(csvData[0].date));
 
     // Here is the function to create the header that displays the month and year
     // The header also allows user to toggle between months and select Today to return to current date
     const getHeader = () => {
         return (
-            <div className="header">
+            <div className="header" key="header">
                 <div className="todayButton" onClick={() => {
                     setSelectedDate(new Date());
                     setActiveDate(new Date());
@@ -52,7 +55,7 @@ export default function EnergyCal() {
                 </div>
             );
         }
-        return <div className="weekContainer">{weekDays}</div>
+        return <div className="weekContainer" key="weekNames">{weekDays}</div>
     }
 
     // This function creates the days of the month for the calendar
@@ -60,22 +63,61 @@ export default function EnergyCal() {
         let currentDate = date;
         const week = []
         for (let day = 0; day < 7; day++) {
-            const cloneDate = currentDate;
             week.push(
                 <div className={
                     `day ${
-                        isSameMonth(currentDate, activeDate) ? "" : "inactiveDay"} 
-                        ${isSameDay(currentDate, selectedDate) ? "selectedDay" : ""} 
-                        ${isSameDay(currentDate, new Date()) ? "today" : ""}`}
-                        onClick={() => {
-                            setSelectedDate(cloneDate);
-                        }}
-                >{format(currentDate, "d")}</div>
+                        isSameMonth(currentDate, activeDate) ? "" : "inactiveDay"}
+                        ${isSameDay(currentDate, selectedDate) ? "selectedDay" : ""}
+                        ${generateHighlight(currentDate)}`}
+                        $
+                >
+                    {format(currentDate, "d")}
+                </div>
             );
             currentDate = addDays(currentDate, 1);
+
+            
         }
+        
         return <>{week}</>
     }
+    
+    // this method creates the highlighted region based on the data in the csv file
+    const generateHighlight = (date) => {
+        let currentDate = date;
+        console.log(currentDate)
+        
+        for (let i = 0; i < csvData.length; i++){
+            if (isSameDay(currentDate, new Date(csvData[i].date))){
+                return `${getHighlight(csvData[i].count)}`
+            }
+        }
+    }
+
+    // This method returns the string correlating to the data from the csv file
+    const getHighlight = (param) => {
+        if (param === 1) {
+            return "one"
+        }
+        else if (param === 2) {
+            return "two"
+        }
+        else if (param === 3) {
+            return "three"
+        }
+        else if (param === 4) {
+            return "four"
+        }
+        else if (param === 5) {
+            return "five"
+        }
+        else {
+            return null
+        }
+    }
+
+    
+    
 
     // This function creates the calendar for the current month
     const getDates = () => {
@@ -90,11 +132,12 @@ export default function EnergyCal() {
 
         while (currentDate <= endDate) {
             allWeeks.push(
-                generateDatesForCurrentWeek(currentDate, selectedDate, activeDate)
+                generateDatesForCurrentWeek(currentDate, selectedDate, activeDate),
             );
             currentDate = addDays(currentDate, 7);
+            
         }
-        return <div className="weekContainer">{allWeeks}</div>
+        return <div className="weekContainer" key="getDates">{allWeeks}</div>
     }
 
 
