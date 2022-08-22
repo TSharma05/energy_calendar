@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.10.1",
     "@syncfusion/ej2-calendars": "^20.2.43",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",

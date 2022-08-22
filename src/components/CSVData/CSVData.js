@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
 import EnergyCal from "../../pages/EnergyCal/EnergyCal";
 
@@ -18,11 +18,14 @@ export default function CSVData() {
             },
         });
     };
-    
+
     // method to combine data that is on the same day
     const getData = csvData.map((item) => {
         // create a date variable
         const date = item["Date & Time"].split(" ")[0];
+
+        // pull just day from date
+        const day = date.split("-")[1];
         
         // for similar dates, add the usage data together
         // for similar dates, add the generation data together
@@ -42,7 +45,7 @@ export default function CSVData() {
             const dateFormat = new Date(+year, +month - 1, +day);
 
 
-            return {strDate: date, date: dateFormat, usage: usage, generation: generation}; 
+            return {strDate: date, date: dateFormat, usage: usage, generation: generation, day:day}; 
         } else {
             return "No data"
         }

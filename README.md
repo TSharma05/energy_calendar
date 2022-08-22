@@ -38,3 +38,13 @@ install the necessary package:
 - The next method needed will loop through the csvData and assign the correct highlight region based on the count key from the data. This is called generateHighlight.
 - Inside the generateDatesForCurrentWeek method we will call the generateHighlight method. This will create the appropriate shaded region for each day.
 - In the EnergyCal.css file add the correct background color for each count option (1-5) so the correct colors are displayed.
+
+
+## Hover Data for Each Date ##
+*When you hover over a shaded date the produced and consumed data will appear*
+
+- For this we will use Material UI and the Popover feature. To install Material UI use the following
+`npm install @mui/material @emotion/react @emotion/styled`
+- Import Popover and Typography to the EnergyCal.js page. 
+- Create two state variables: anchorEl and getHoverDay. anchorEl will be used to determine when the mouse is hovering and when it leaves that div. getHoverDay is used to store the day being hovered over to compare to the csvData.
+- The Popover tag will be added to the render in the generateDatesForCurrentWeek method. See the code on that page for how the data is displayed.

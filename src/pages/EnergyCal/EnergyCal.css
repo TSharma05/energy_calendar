@@ -115,3 +115,11 @@ border-radius: 50%;
 .energyCal {
     margin: auto;
 }
+
+.hover {
+    cursor: pointer;
+    width: 300px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+}

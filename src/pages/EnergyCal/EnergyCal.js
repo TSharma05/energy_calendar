@@ -13,6 +13,8 @@ import {
     addMonths,
 } from "date-fns";
 import "./EnergyCal.css"
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
 
 
 
@@ -20,6 +22,22 @@ import "./EnergyCal.css"
 export default function EnergyCal(props) {
     // keep track of the selected date
     const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [getHoverDay, setHoverDay] = useState("");
+
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+        setHoverDay(event.currentTarget.innerText);
+        
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+        setHoverDay("");
+    };
+
+    const open = Boolean(anchorEl);
 
     let csvData = props.data;
 
@@ -63,17 +81,58 @@ export default function EnergyCal(props) {
         let currentDate = date;
         const week = []
         for (let day = 0; day < 7; day++) {
+            
             week.push(
+                
                 <div className={
-                    `day ${
-                        isSameMonth(currentDate, activeDate) ? "" : "inactiveDay"}
-                        ${isSameDay(currentDate, selectedDate) ? "selectedDay" : ""}
-                        ${generateHighlight(currentDate)}`}
-                        $
+                `day ${
+                    isSameMonth(currentDate, activeDate) ? "" : "inactiveDay"}
+                    ${isSameDay(currentDate, selectedDate) ? "selectedDay" : ""}
+                    ${generateHighlight(currentDate)}`}
+                    $
+                    value={currentDate}
                 >
-                    {format(currentDate, "d")}
+                    <div onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
+                        {format(currentDate, "d")}
+                    </div>
+                    <Popover
+                        id="mouse-over-popover"
+                        sx={{
+                        pointerEvents: 'none',
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                    >
+                        <Typography sx={{ p: 1 }} id="popup">
+                            {anchorEl != null && 
+                                csvData.map((element) => {
+                                    let addZero = parseInt(getHoverDay).toLocaleString('en-US', {minimumIntegerDigits: 2})
+                                    if(element.day === addZero){
+                                        return (
+                                            <p>
+                                                Produced: {element.generation} kWh <br/>
+                                                Consumed: {element.usage} kWh <br/>
+                                            </p>
+                                        )
+                                    } 
+                                })}
+                        </Typography>
+                    </Popover>
+                    
                 </div>
+                
             );
+            ;
             currentDate = addDays(currentDate, 1);
 
             
@@ -85,7 +144,6 @@ export default function EnergyCal(props) {
     // this method creates the highlighted region based on the data in the csv file
     const generateHighlight = (date) => {
         let currentDate = date;
-        console.log(currentDate)
         
         for (let i = 0; i < csvData.length; i++){
             if (isSameDay(currentDate, new Date(csvData[i].date))){
@@ -147,6 +205,6 @@ export default function EnergyCal(props) {
         {getHeader()}
         {getWeekDaysNames()}
         {getDates()}
-    </div>
+    </div>  
   );
 }
