@@ -1,5 +1,12 @@
 # Interactive Energy Calendar
 
+## Run the Calendar ##
+- Clone the git repository 
+- Run the git clone in your terminal
+- cd into the folder
+- Run `npm install` this will install all the necessary dependencies
+- Run `npm start` and the project will load. *Note: you will need a properly formated csv file to run this project*
+
 ## Create the Calendar ##
 install the necessary packages:
 `npm install date-fns --save`
@@ -48,3 +55,17 @@ install the necessary package:
 - Import Popover and Typography to the EnergyCal.js page. 
 - Create two state variables: anchorEl and getHoverDay. anchorEl will be used to determine when the mouse is hovering and when it leaves that div. getHoverDay is used to store the day being hovered over to compare to the csvData.
 - The Popover tag will be added to the render in the generateDatesForCurrentWeek method. See the code on that page for how the data is displayed.
+
+
+## Calculate Individual and Total Energy Spent/Saved ##
+*For this a negative value means money was spent and a positive value means money saved*
+
+- In CSVData.js we generate a new key:value pair for the csvData being sent to EnergyCal.js.
+- In file at line 89 you will see a .forEach() being used. This will add the total amount saved or spent for each day. 
+    - Here is the formula that was used: 
+        Produced energy - consumed energy = energy used/saved
+    - The energy used/saved is then multiplied by 0.166.
+        - According to the US Bureau of Labor Statistics the national average cost for energy is $0.166 / kWh. 
+- In EnergyCal.js the information was added to the generateDatesForCurrentWeek method so that when you hover over a date you now also see the amount of money saved or spent.
+- To display the total month savings below the calendar a new method is created. This is called getTotal. You can see the code in the file for this function. 
+- The method is then called in the render section of the EnergyCal function. 

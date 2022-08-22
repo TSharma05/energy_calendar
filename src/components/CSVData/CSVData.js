@@ -44,12 +44,17 @@ export default function CSVData() {
             const [year, month, day] = date.split("-");
             const dateFormat = new Date(+year, +month - 1, +day);
 
-
             return {strDate: date, date: dateFormat, usage: usage, generation: generation, day:day}; 
         } else {
             return "No data"
         }
+
+
     })
+
+    
+
+    
 
     // method to clean up data so it's not repeating
     const cleanData = getData.filter((item, index) => {
@@ -79,6 +84,12 @@ export default function CSVData() {
           else {
             object.count = 0;
           }
+    })
+
+    cleanData.forEach(object => {
+        let energy = parseFloat(object.generation - object.usage) * 0.166;
+        object.energy = energy.toFixed(2);
+
     })
 
     var revData = cleanData.reverse();

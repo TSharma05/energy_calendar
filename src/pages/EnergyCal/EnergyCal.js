@@ -122,6 +122,7 @@ export default function EnergyCal(props) {
                                             <p>
                                                 Produced: {element.generation} kWh <br/>
                                                 Consumed: {element.usage} kWh <br/>
+                                                Cost: ${element.energy}
                                             </p>
                                         )
                                     } 
@@ -174,6 +175,21 @@ export default function EnergyCal(props) {
         }
     }
 
+    // This method calculates total money saved or spent for the month
+    const getTotal = () => {
+        let total = 0;
+        for (let i = 0; i < csvData.length; i++){
+            if (isSameMonth(new Date(csvData[i].date), activeDate)){
+                total += parseFloat(csvData[i].energy);
+            }
+        }
+        // return total.toFixed(2);
+        return (
+            <div className="total">
+                <h2>You will save ${total.toFixed(2)} this month</h2>
+            </div>
+        )
+    }
     
     
 
@@ -201,10 +217,10 @@ export default function EnergyCal(props) {
 
   return (
     <div className="energyCal">
-      <h1>EnergyCal</h1>
         {getHeader()}
         {getWeekDaysNames()}
         {getDates()}
+        {getTotal()}
     </div>  
   );
 }
